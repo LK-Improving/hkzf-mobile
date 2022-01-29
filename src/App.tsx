@@ -1,26 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {NavBar} from 'antd-mobile'
+import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {Home} from "./pages/Home";
+import {CityList} from "./pages/CityList";
+import {News} from "./pages/News";
+import {Me} from "./pages/Me";
+import {LayoutBottom} from "./layout/LayoutBottom";
+import {LayoutTop} from "./layout/LayoutTop";
+import {LayoutMain} from "./layout/LayoutMain";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Router>
+            <div>
+                <div>
+                    <LayoutTop/>
+                </div>
+                <div>
+                    <LayoutMain/>
+                </div>
+                <div>
+                    <LayoutBottom/>
+                </div>
+            </div>
+        </Router>
+    );
 }
 
 export default App;

@@ -1,13 +1,25 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+* {
+  box-sizing: border-box;
 }
+body {
+  height: 100%;
+  font-family: "Microsoft YaHei";
+  color: #333;
+  background: #fff;
+}
+:root:root {
+  --adm-color-primary: #21b97a;
+  --adm-color-success: #00b578;
+  --adm-color-warning: #ff8f1f;
+  --adm-color-danger: #ff3141;
+  --adm-color-white: #ffffff;
+  --adm-color-weak: #888;
+  --adm-color-light: #cccccc;
+  --adm-border-color: #eeeeee;
+  --adm-font-size-main: 13px;
+  --adm-color-text: #333333;
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  --adm-font-family: -apple-system, blinkmacsystemfont, 'Helvetica Neue',
+  helvetica, segoe ui, arial, roboto, 'PingFang SC', 'miui',
+  'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
 }

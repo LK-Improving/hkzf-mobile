@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {Route} from "react-router-dom";
+import {Redirect, Route} from "react-router-dom";
 import {Home} from "../../pages/Home";
 import {CityList} from "../../pages/CityList";
 import {News} from "../../pages/News";
@@ -31,6 +31,7 @@ export const LayoutMain = () => {
             <Route exact path='/me'>
                 <Me/>
             </Route>
+            <Route exact path='/' render={() => <Redirect to={'/home'}/>} />
         </div>
     );
 };

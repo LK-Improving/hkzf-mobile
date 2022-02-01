@@ -18,7 +18,7 @@ export const LayoutMain = () => {
     /**render**/
 
     return(
-        <div>
+        <div style={{marginBottom:'50px'}}>
             <Route exact path='/home'>
                 <Home/>
             </Route>

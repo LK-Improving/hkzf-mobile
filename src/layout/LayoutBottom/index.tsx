@@ -45,7 +45,7 @@ export const LayoutBottom = () => {
     /**render**/
 
     return(
-            // Bottom
+            // 底部导航栏
             <TabBar activeKey={pathname} onChange={value => setRouteActive(value)}>
                 {tabs.map(item => (
                     <TabBar.Item key={item.key}  icon={item.icon} title={item.title}/>

@@ -26,7 +26,7 @@ export const SwiperItems = (props: any) => {
                                 alert(`你点击了卡片 ${index + 1}`)
                             }}
                         >
-                            <Image lazy src={item['goodsImgurl']}/>
+                            <Image lazy src={item}/>
                         </div>
                     </Swiper.Item>
                 ))

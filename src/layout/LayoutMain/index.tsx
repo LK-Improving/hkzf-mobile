@@ -4,6 +4,7 @@ import {Home} from "../../pages/Home";
 import {CityList} from "../../pages/CityList";
 import {News} from "../../pages/News";
 import {Me} from "../../pages/Me";
+import {Map} from "../../pages/Map";
 
 export const LayoutMain = () => {
 
@@ -30,6 +31,9 @@ export const LayoutMain = () => {
             </Route>
             <Route exact path='/me'>
                 <Me/>
+            </Route>
+            <Route exact path='/map'>
+                <Map/>
             </Route>
             <Route exact path='/' render={() => <Redirect to={'/home'}/>} />
         </div>

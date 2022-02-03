@@ -1,21 +1,21 @@
 import axios from 'axios'
 // import QS from 'qs' // 引入qs模块，用来序列化post类型的数据
 
+
+
 // 环境的变化
 if (process.env.NODE_ENV === 'development') {
-    axios.defaults.baseURL = 'http://1.117.227.135:8080' // 'http://ip:port/v1.0.0/api/app'
+    axios.defaults.baseURL = 'https://api-haoke-web.itheima.net' // 'http://ip:port/v1.0.0/api/app'
 } else if (process.env.NODE_ENV === 'production') {
-    axios.defaults.baseURL = 'https://chtesticbc001.chuanxingcloud.com/v1.0.0/api' // 'http://49.235.10.43:8880/v1.0.0/api/app'
+    axios.defaults.baseURL = 'https://api-haoke-web.itheima.net' // 'http://49.235.10.43:8880/v1.0.0/api/app'
 }
+export const baseUrl = axios.defaults.baseURL
 
 // 设置请求超时
 axios.defaults.timeout = 1000
 
 // 设置请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-
-// 设置token
-axios.defaults.headers.token = 'fc30a6aab1482e482593ba4b6544fe32'
 
 
 // 请求拦截器

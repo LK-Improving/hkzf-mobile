@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import {BrowserRouter as Router, useHistory, useLocation} from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import {UserOutline} from "antd-mobile-icons";
 import {TabBar} from "antd-mobile";
 
 export const LayoutBottom = () => {
     const history = useHistory()
     const location = useLocation()
-    console.log(history)
     const {pathname}  = location
     const tabs = [
         {

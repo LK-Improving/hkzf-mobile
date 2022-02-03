@@ -1,6 +1,7 @@
 import {Swiper, Image} from 'antd-mobile';
 import React, {useEffect, useState, Fragment} from 'react'
 import styles from './index.module.less'
+import {baseUrl} from "../../utils/request/http";
 
 export const SwiperItems = (props: any) => {
 
@@ -26,7 +27,7 @@ export const SwiperItems = (props: any) => {
                                 alert(`你点击了卡片 ${index + 1}`)
                             }}
                         >
-                            <Image lazy src={item}/>
+                            <Image src={baseUrl + item}/>
                         </div>
                     </Swiper.Item>
                 ))

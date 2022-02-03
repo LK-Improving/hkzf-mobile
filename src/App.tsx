@@ -8,14 +8,12 @@ import {LayoutMain} from "./layout/LayoutMain";
 function App() {
     return (
         <Router>
-            <div>
                 {/*布局顶部*/}
-                <LayoutTop/>
+                {/*<LayoutTop/>*/}
                 {/*布局主体*/}
                 <LayoutMain/>
                 {/*布局底部*/}
                 <LayoutBottom/>
-            </div>
         </Router>
     );
 }

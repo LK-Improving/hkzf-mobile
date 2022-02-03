@@ -1,8 +1,11 @@
 import {get, post} from './http'
 
-// 获取商品分裂
-export const apiGetSwiper = () => post('/tbmodule/goods/list')
+// 首页轮播图
+export const apiGetSwiper = () => get('/home/swiper')
 
-// 切换商品分类
-export const apiChangeOption = (goodsName) => post('/tbmodule/goods/listlike', goodsName)
+// 租房小组
+export const apiGetGroups = (area) => get('/home/groups', area)
+
+// 资讯
+export const apiGetNews = (area) => get('/home/news', area)
 

@@ -6,6 +6,7 @@ body {
   font-family: "Microsoft YaHei";
   color: #333;
   background: #fff;
+  margin: 0;
 }
 :root:root {
   --adm-color-primary: #21b97a;

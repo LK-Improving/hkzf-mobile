@@ -1,19 +1,23 @@
 import React from 'react';
 import './App.css';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
-import {LayoutBottom} from "./layout/LayoutBottom";
-import {LayoutTop} from "./layout/LayoutTop";
-import {LayoutMain} from "./layout/LayoutMain";
+import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom';
+import router, {redirectRouter} from './router'
+import {Map} from "./pages/Map";
+import {DefaultLayout} from "./layouts/DefaultLayout";
 
 function App() {
+    console.log(router)
     return (
         <Router>
-                {/*布局顶部*/}
-                {/*<LayoutTop/>*/}
-                {/*布局主体*/}
-                <LayoutMain/>
-                {/*布局底部*/}
-                <LayoutBottom/>
+            {
+                router.map((item:any,index:number)=>{
+                    return <Route exact={item['exact']} key={index} path={item['path']}>
+                        {item['component']}
+                    </Route>
+                })
+            }
+            <Route exact path={(redirectRouter as any).path}
+                   render={() => <Redirect to={(redirectRouter as any).redirect}/>}/>
         </Router>
     );
 }

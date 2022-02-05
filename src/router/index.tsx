@@ -3,7 +3,7 @@ import {CityList} from "../pages/CityList";
 import {News} from "../pages/News";
 import {Home} from "../pages/Home";
 import {Me} from "../pages/Me";
-import {Map} from "../pages/Map";
+import {BdMap} from "../pages/BdMap";
 import {DefaultLayout} from "../layouts/DefaultLayout";
 import {UserOutline} from "antd-mobile-icons";
 
@@ -47,7 +47,7 @@ const otherRouter:object[] = [{
     path: '/other/map',
     name: 'Map',
     exact: true,
-    component: <Map/>
+    component: <BdMap/>
 }]
 
 export default layoutRouter.concat(otherRouter)

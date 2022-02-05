@@ -2,8 +2,6 @@ import React from 'react';
 import './App.css';
 import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom';
 import router, {redirectRouter} from './router'
-import {Map} from "./pages/Map";
-import {DefaultLayout} from "./layouts/DefaultLayout";
 
 function App() {
     console.log(router)

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import {CustomOverlay, Map} from 'react-bmapgl';
+import {NavBar} from "antd-mobile";
+import { useHistory } from 'react-router-dom';
 
 export const BdMap = () => {
 
     /**state  state部分**/
     const [location,setLocation ]= useState<object>({lng:  116.404449, lat: 39.914889})
+    const history = useHistory()
     /**effect  effect部分**/
     useEffect(()=>{
         // 通过H5Api获取位置信息
@@ -21,7 +24,7 @@ export const BdMap = () => {
     },[])
     /**methods 方法部分**/
     // 通过百度地图Api获取位置信息
-    async function getLocation(){
+     const getLocation = async () => {
         //const BMap = window.BMap 这样写也可以
         const {BMapGL} = window as any
         // 初始化地图实例
@@ -34,11 +37,17 @@ export const BdMap = () => {
             console.log(`您当前在${province + city + district + street}`)
         });
     }
+    const back = () => {
+         // 跳转至上一个路由
+         history.go(-1)
+    }
     /**styles 样式部分**/
 
     /**render**/
 
     return(
+        <div>
+            <NavBar back={'返回'} onBack={back}>地图找房</NavBar>
             <Map
                 style={{ height: '100vh' }}
                 center={location}
@@ -55,5 +64,6 @@ export const BdMap = () => {
                     </div>
                 </CustomOverlay>
             </Map>
+        </div>
     );
 };

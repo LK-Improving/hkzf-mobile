@@ -15,7 +15,7 @@ export const News = () => {
     /**methods 方法部分**/
     // 获取资讯
     async function getNews() {
-        await apiGetNews({area: 'AREA|88cff55c-aaa4-e2e0'}).then(res => {
+        await apiGetNews({area: 'AREA|88cff55c-aaa4-e2e0'}).then((res:any) => {
             const {body:data} = res
             setNews(data)
         })

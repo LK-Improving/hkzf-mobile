@@ -6,6 +6,7 @@ import store from "../../../redux/store";
 import {apiAreaInfo} from "../../../utils/request/api";
 import {Toast} from "antd-mobile";
 import {setCityAction} from "../../../redux/City/action";
+import {getCurrentCity} from "../../../utils";
 
 
 export const Search = () => {
@@ -20,26 +21,26 @@ export const Search = () => {
 
     /**methods 方法部分**/
     // 通过百度地图Api获取位置信息
-    function getLocation() {
-        // 注意：在react脚手架中全局对象需要使用window来访问。
-        //const BMap = window.BMap 这样写也可以
-        const {BMapGL} = window as any
-        // 初始化地图实例
-        var geolocation = new BMapGL.Geolocation();
-        geolocation.getCurrentPosition(function (r: any) {
-            const {address: {province, city, district, street}} = r
-            const cityName = city.toString().replace('市','')
-            console.log(`您当前在${province + city + district + street}`)
-            // ES6的Object.keys()方法，返回值是对象中属性名组成的数组
-            var arr:string[] = Object.keys(store.getState().city);
-            console.log(arr)
-            if (arr.length === 0){
+    const getLocation = async ()=> {
+        // ES6的Object.keys()方法，返回值是对象中属性名组成的数组
+        var arr:string[] = Object.keys(store.getState().city);
+        if (arr.length === 0){
+            // 注意：在react脚手架中全局对象需要使用window来访问。
+            //const BMap = window.BMap 这样写也可以
+            const {BMapGL} = window as any
+            // 初始化地图实例
+            var geolocation = new BMapGL.Geolocation();
+            await geolocation.getCurrentPosition(function (r: any) {
+                const {address: {province, city, district, street}} = r
+                const cityName = city.toString().replace('市','')
+                console.log(`您当前在${province + city + district + street}`)
                 areaInfo(cityName)
-            } else {
-                const {label} = store.getState().city as any
-                setCity(label)
-            }
-        });
+            });
+        } else {
+            const {label} = store.getState().city as any
+            setCity(label)
+        }
+
     }
 
     // 路由跳转
@@ -48,7 +49,7 @@ export const Search = () => {
     }
     // 根据城市名称查询该城市信息
     function areaInfo(name:string) {
-        apiAreaInfo({name}).then(res => {
+        apiAreaInfo({name}).then((res:any) => {
             const {status,body:cityInfo} = res
             if (status === 200){
                 if (cityInfo.label === name){
@@ -67,7 +68,7 @@ export const Search = () => {
 
     return (
         <div className={styles.search}>
-            <div className={styles.searchLeft} onClick={() => go('/modules/city-list')}>
+            <div className={styles.searchLeft} onClick={() => go('/other/city-list')}>
                 <div className={styles.location}>
                     <span>{city}<i className='iconfont icon-xiala'/></span>
                 </div>

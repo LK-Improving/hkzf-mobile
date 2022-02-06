@@ -1,7 +1,8 @@
 import {SET_CITY} from "../contant";
 
 // 初始化状态
-const initState:object = {}
+const initState:object = JSON.parse(localStorage.getItem('city')!) ?
+    JSON.parse(localStorage.getItem('city')!) as object : {}
 
 export default function cityReducer(preState = initState, action:any):object {
     // 从action对象获取：type，data

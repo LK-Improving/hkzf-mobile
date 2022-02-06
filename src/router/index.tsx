@@ -6,6 +6,7 @@ import {Me} from "../pages/Me";
 import {BdMap} from "../pages/BdMap";
 import {DefaultLayout} from "../layouts/DefaultLayout";
 import {UserOutline} from "antd-mobile-icons";
+import {HouseList} from "../pages/HouseList";
 
 export const redirectRouter:object = {
     path:'/',
@@ -23,9 +24,9 @@ export const layoutRouter:object[] = [{
         title: '首页',
         icon: <i className='iconfont icon-home'/>
     },{
-        path: '/modules/city-list',
-        name: 'CityList',
-        component: <CityList/>,
+        path: '/modules/House-list',
+        name: 'HouseList',
+        component: <HouseList/>,
         title: '找房',
         icon: <i className='iconfont icon-search'/>
     },{
@@ -48,6 +49,11 @@ const otherRouter:object[] = [{
     name: 'Map',
     exact: true,
     component: <BdMap/>
+},{
+    path: '/other/city-list',
+    name: 'CityList',
+    exact: true,
+    component: <CityList/>
 }]
 
 export default layoutRouter.concat(otherRouter)

@@ -15,7 +15,7 @@ export const Groups = () => {
     /**methods 方法部分**/
 // 获取租户小组
     async function getGroups() {
-        await apiGetGroups({area: 'AREA|88cff55c-aaa4-e2e0'}).then(res => {
+        await apiGetGroups({area: 'AREA|88cff55c-aaa4-e2e0'}).then((res:any) => {
             const {body:data} = res
             setGroups(data)
         })

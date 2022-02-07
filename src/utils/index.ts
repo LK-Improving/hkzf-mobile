@@ -25,6 +25,7 @@ export const formatCityData = (list:object[]) =>{
             cityList[first] = [item]
         }
     })
+    // ES6的Object.keys()方法，返回值是对象中属性名组成的数组
     const cityIndex = Object.keys(cityList).sort()
     return{
         cityIndex,
@@ -35,31 +36,41 @@ export const formatCityData = (list:object[]) =>{
 // 通过百度地图Api获取位置信息
 export const getCurrentCity =  ()=> {
     const localCiy = JSON.parse(localStorage.getItem('city')!)
+    // 判断localStorage是否有定位城市
     if (!localCiy){
-        // 注意：在react脚手架中全局对象需要使用window来访问。
-        //const BMap = window.BMap 这样写也可以
-        const {BMapGL} = window as any
-        // 初始化地图实例
-        var geolocation = new BMapGL.Geolocation();
-        geolocation.getCurrentPosition(  (r:any)=>{
-            const {address:{province,city,district,street}} = r
-            const cityName = city.toString().replace('市','')
-            console.log(r)
-            console.log(`您当前在${province + city + district + street}`)
-            // 根据城市名称查询该城市信息
-            apiAreaInfo({cityName}).then((res:any) => {
-                const {status,body:cityInfo} = res
-                if (status === 200){
-                    if (cityInfo.label !== cityName){
-                        Toast.show(`您所在的城市暂无房源信息，已将您的位置信息自动切换至${cityInfo.label}！`)
-                    }
-                    store.dispatch(setCityAction(cityInfo))
-                    localStorage.setItem('city',JSON.stringify(cityInfo))
-                    return cityInfo
+        return new Promise((resolve, reject) => {
+            // 注意：在react脚手架中全局对象需要使用window来访问。
+            //const BMap = window.BMap 这样写也可以
+            const {BMapGL} = window as any
+            // 初始化地图实例
+            var geolocation = new BMapGL.Geolocation();
+            geolocation.getCurrentPosition(  (r:any)=>{
+                const {address:{province,city,district,street}} = r
+                const cityName = city.toString().replace('市','')
+                console.log(r)
+                console.log(`您当前在${province + city + district + street}`)
+                try {
+                    // 根据城市名称查询该城市信息
+                    apiAreaInfo({cityName}).then((res:any) => {
+                        const {status,body:cityInfo} = res
+                        if (status === 200){
+                            if (cityInfo.label !== cityName){
+                                Toast.show(`您所在的城市暂无房源信息，已将您的位置信息自动切换至${cityInfo.label}！`)
+                            }
+                            store.dispatch(setCityAction(cityInfo))
+                            localStorage.setItem('city',JSON.stringify(cityInfo))
+                            resolve(cityInfo)
+                        }
+                    })
+                } catch (e) {
+                    reject(e)
                 }
-            })
-        });
-    } else {
-        return localCiy
+            });
+        })
+    }
+    // 如果有，直接返回本地存储中的城市数据
+    // 因为此处的 Promise 不会失败，所以，此处，只返回一个成功的Promise
+    else {
+        return Promise.resolve(localCiy)
     }
 }

@@ -36,7 +36,7 @@ export const Search = () => {
 
     return (
         <div className={styles.search}>
-            <div className={styles.searchLeft} onClick={() => go('/other/city-list')}>
+            <div className={styles.searchLeft} onClick={() => go('/view/city-list')}>
                 <div className={styles.location}>
                     <span>{city}<i className='iconfont icon-xiala'/></span>
                 </div>
@@ -44,7 +44,7 @@ export const Search = () => {
                     <span><i className='iconfont icon-sousuo'/>请输入小区或地址</span>
                 </div>
             </div>
-            <div className={styles.searchRight} onClick={() => go('/other/map')}>
+            <div className={styles.searchRight} onClick={() => go('/view/map')}>
                 <i className={'iconfont icon-ditu ' + styles.icon}/>
             </div>
         </div>

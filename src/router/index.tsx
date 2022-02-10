@@ -45,12 +45,12 @@ export const layoutRouter:object[] = [{
 }]
 
 const otherRouter:object[] = [{
-    path: '/other/map',
+    path: '/view/map',
     name: 'Map',
     exact: true,
     component: <BdMap/>
 },{
-    path: '/other/city-list',
+    path: '/view/city-list',
     name: 'CityList',
     exact: true,
     component: <CityList/>

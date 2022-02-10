@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'react-virtualized/styles.css';
 import './assets/style/index.less'
 import './index.css';
 import App from './App';

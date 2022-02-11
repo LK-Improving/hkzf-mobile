@@ -1,4 +1,4 @@
-import {IndexBar, NavBar, List as amList} from 'antd-mobile';
+import {IndexBar, NavBar, List as amList, Toast} from 'antd-mobile';
 import {AutoSizer, List} from 'react-virtualized';
 import React, {useEffect, useRef, useState} from 'react'
 import {useHistory} from 'react-router-dom';
@@ -59,8 +59,17 @@ export const CityList = () => {
             // this.listRef.current.scrollToRow(index) //或者调用组件的方法可以实现一样的效果
         }
     }
-    const changeCity = (data: object) => {
+    const changeCity = (data: any) => {
         return () => {
+            const existList = ['北京','上海','广州','深圳']
+            const isExist = existList.find((item)=>{
+                return item === data.label
+            })
+            if (isExist === undefined) {
+                return Toast.show({
+                    content: '该城市暂无房源信息'
+                })
+            }
             store.dispatch(setCityAction(data))
             localStorage.setItem('city', JSON.stringify(data))
             back()

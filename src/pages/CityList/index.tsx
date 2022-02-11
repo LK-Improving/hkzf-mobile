@@ -55,7 +55,6 @@ export const CityList = () => {
     }
     const handleJump = (index:number) => {
         return () => {
-            console.log(index)
             setChooseIndex(index)
             // this.listRef.current.scrollToRow(index) //或者调用组件的方法可以实现一样的效果
         }
@@ -79,20 +78,13 @@ export const CityList = () => {
                 </div>
                 {
                     (dataList as any)[cityTitle].map((item:any,index2:number)=>{
-                        return <div className={'name'} key={index2}>
+                        return <div className={'name'} key={index2} onClick={changeCity(item)}>
                             {item.label}
                         </div>
                     })
                 }
             </div>
         );
-    }
-    // @ts-ignore
-    const onRowsRendered = ({ overscanStartIndex, overscanStopIndex, startIndex, stopIndex }) => {
-        console.log(overscanStartIndex, overscanStopIndex, startIndex, stopIndex);
-        return () => {
-            setChooseIndex(startIndex)
-        }
     }
     // 右侧城市索引列表： index-active
     function renderJumpIcon() {
@@ -105,6 +97,13 @@ export const CityList = () => {
                 ))}
             </ul>
         )
+    }
+    // @ts-ignore
+    const onRowsRendered = ({ overscanStartIndex, overscanStopIndex, startIndex, stopIndex }) => {
+        // console.log(overscanStartIndex, overscanStopIndex, startIndex, stopIndex);
+        return () => {
+            setChooseIndex(startIndex)
+        }
     }
     // 手动计算每一行的高度
     // @ts-ignore

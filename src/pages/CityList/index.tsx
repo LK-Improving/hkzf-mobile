@@ -8,6 +8,7 @@ import {IndexBarRef} from "antd-mobile/es/components/index-bar";
 import './index.less'
 import store from "../../redux/store";
 import {setCityAction} from "../../redux/City/action";
+import { LayoutTop } from '../../layouts/DefaultLayout/LayoutTop';
 
 
 export const CityList = () => {
@@ -16,7 +17,7 @@ export const CityList = () => {
     const history = useHistory()
     const [dataList, setDataList] = useState<object>([])
     const [dataIndex, setDataIndex] = useState<string[]>([])
-    const [chooseIndex, setChooseIndex] = useState<number>(0)
+    const [activeIndex, setActiveIndex] = useState<number>(0)
     const indexBarRef = useRef<IndexBarRef>(null)
     const listRef = useRef(null)
     /**effect  effect部分**/
@@ -31,7 +32,7 @@ export const CityList = () => {
             cityIndex = ['#', ...cityIndex]
             setDataList(cityList)
             setDataIndex(cityIndex)
-            indexBarRef.current?.scrollTo(cityIndex[0])
+            indexBarRef.current?.scrollTo(cityIndex[0])//indexBar默认跳转第一条
         }
     // 获取热门城市列表数据
     const getHotCityList = async (cityList: object | any, cityIndex: string[]) => {
@@ -53,12 +54,30 @@ export const CityList = () => {
         // 返回上一个路由
         history.goBack()
     }
+    // 跳转指定索引
     const handleJump = (index:number) => {
         return () => {
-            setChooseIndex(index)
-            // this.listRef.current.scrollToRow(index) //或者调用组件的方法可以实现一样的效果
+            setActiveIndex(index)
+            // @ts-ignore
+            // listRef.current?.scrollToRow(index) //或者调用组件的方法可以实现一样的效果
         }
     }
+    // 用于获取list组件中渲染行的信息
+    const onRowsRendered =  ({startIndex}:any) => {
+        if (activeIndex !== startIndex){
+            setActiveIndex(startIndex)
+        }
+    }
+    // todo:点击部分索引会出现跳转其他索引，height设置固定值不会出现该Bug
+    // 手动计算每一行的高度
+    const rowHeight = ({ index }:any) => {
+        // 一行内容的高度 = 36 标题高度 + 城市数量 * 50
+        const cityIndex = dataIndex[index]
+        const height = (dataList as any)[cityIndex].length
+        return 36 + height * 50
+        // return 200
+    }
+    // 修改城市信息
     const changeCity = (data: any) => {
         return () => {
             const existList = ['北京','上海','广州','深圳']
@@ -101,31 +120,17 @@ export const CityList = () => {
             <ul className="city-index">
                 {dataIndex.map((item, index) => (
                     <li className="city-index-item" key={item} onClick={handleJump(index)}>
-                        <span className={chooseIndex === index?'index-active':''}>{item === 'hot' ? '热' : item.toUpperCase()}</span>
+                        <span className={activeIndex === index?'index-active':''}>{item === 'hot' ? '热' : item.toUpperCase()}</span>
                     </li>
                 ))}
             </ul>
         )
     }
-    // @ts-ignore
-    const onRowsRendered = ({ overscanStartIndex, overscanStopIndex, startIndex, stopIndex }) => {
-        // console.log(overscanStartIndex, overscanStopIndex, startIndex, stopIndex);
-        return () => {
-            setChooseIndex(startIndex)
-        }
-    }
-    // 手动计算每一行的高度
-    // @ts-ignore
-    const rowHeight = ({ index }) => {
-        // 一行内容的高度 = 36 标题高度 + 城市数量 * 50
-        const cityTitle = dataIndex[index]
-        return 36 + (dataList as any)[cityTitle].length * 50
-    }
     /**render**/
 
     return (
         <div style={{height: window.innerHeight}}>
-            <NavBar back={'返回'} onBack={back}>城市选择</NavBar>
+            <LayoutTop>城市选择</LayoutTop>
             <AutoSizer>
                 {({height, width}) => (
                     <List
@@ -133,7 +138,7 @@ export const CityList = () => {
                         width={width}
                         height={height - 45}
                         rowCount={dataIndex.length}
-                        scrollToIndex={chooseIndex}
+                        scrollToIndex={activeIndex}
                         scrollToAlignment="start"
                         rowHeight={rowHeight}
                         rowRenderer={rowRenderer}

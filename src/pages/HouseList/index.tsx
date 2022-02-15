@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import store from "../../redux/store";
+import {apiAreaMap} from "../../utils/request/api";
 
 export const HouseList = () => {
 

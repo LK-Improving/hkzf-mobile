@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import styles from "./index.module.less";
 import {Grid, Image} from "antd-mobile";
 import {baseUrl} from "../../../utils/request/http";
-import {apiGetGroups} from "../../../utils/request/api";
+import {apiAreaMap, apiGetGroups} from "../../../utils/request/api";
+import store from "../../../redux/store";
 
 export const Groups = () => {
 
@@ -13,7 +14,7 @@ export const Groups = () => {
         getGroups()
     }, [])
     /**methods 方法部分**/
-// 获取租户小组
+    // 获取租户小组
     async function getGroups() {
         await apiGetGroups({area: 'AREA|88cff55c-aaa4-e2e0'}).then((res:any) => {
             const {body:data} = res

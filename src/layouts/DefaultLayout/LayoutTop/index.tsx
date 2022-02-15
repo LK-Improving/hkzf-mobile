@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import {NavBar} from "antd-mobile";
 import {useHistory} from "react-router-dom";
+import PropTypes from 'prop-types'
 
 export const LayoutTop = ({children}:any) => {
 
     /**state  state部分**/
     const history = useHistory()
+    // 使用PropTypes限制props类型（也可使用TS）
+    // @ts-ignore
+    LayoutTop.propTypes = {
+        children: PropTypes.string.isRequired
+    }
     /**effect  effect部分**/
 
     /**methods 方法部分**/

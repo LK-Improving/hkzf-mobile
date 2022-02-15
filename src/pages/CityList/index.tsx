@@ -5,7 +5,7 @@ import {useHistory} from 'react-router-dom';
 import {apiAreaCity, apiAreaHot} from "../../utils/request/api";
 import {formatCityData, getCurrentCity} from "../../utils";
 import {IndexBarRef} from "antd-mobile/es/components/index-bar";
-import './index.less'
+import styles from './index.module.less'
 import store from "../../redux/store";
 import {setCityAction} from "../../redux/City/action";
 import { LayoutTop } from '../../layouts/DefaultLayout/LayoutTop';
@@ -101,12 +101,12 @@ export const CityList = () => {
         const cityTitle = dataIndex[index]
         return (
             <div key={key} style={style}>
-                <div className={'title'}>
+                <div className={styles.title}>
                     {cityTitle === '#' ? '当前城市' : cityTitle === 'hot' ? '热门城市' : cityTitle.toUpperCase()}
                 </div>
                 {
                     (dataList as any)[cityTitle].map((item:any,index2:number)=>{
-                        return <div className={'name'} key={index2} onClick={changeCity(item)}>
+                        return <div className={styles.name} key={index2} onClick={changeCity(item)}>
                             {item.label}
                         </div>
                     })
@@ -117,10 +117,10 @@ export const CityList = () => {
     // 右侧城市索引列表： index-active
     function renderJumpIcon() {
         return (
-            <ul className="city-index">
+            <ul className={styles.cityIndex}>
                 {dataIndex.map((item, index) => (
-                    <li className="city-index-item" key={item} onClick={handleJump(index)}>
-                        <span className={activeIndex === index?'index-active':''}>{item === 'hot' ? '热' : item.toUpperCase()}</span>
+                    <li className={styles.cityIndexItem} key={item} onClick={handleJump(index)}>
+                        <span className={activeIndex === index?styles.indexActive:''}>{item === 'hot' ? '热' : item.toUpperCase()}</span>
                     </li>
                 ))}
             </ul>
@@ -129,8 +129,8 @@ export const CityList = () => {
     /**render**/
 
     return (
-        <div style={{height: window.innerHeight}}>
-            <LayoutTop>城市选择</LayoutTop>
+        <div style={{height: window.innerHeight}} className={styles.cityList}>
+            <LayoutTop children={'城市选择'}/>
             <AutoSizer>
                 {({height, width}) => (
                     <List

@@ -15,5 +15,8 @@ export const apiAreaInfo = (data:unknown) => get('/area/info', data)
 // 获取城市列表数据
 export const apiAreaCity = (data:unknown) => get('/area/city', data)
 
-// 热门城市
+// 获取热门城市
 export const apiAreaHot = () => get('/area/hot', {})
+
+// 获取房源信息
+export const apiAreaMap = (data:unknown) => get('/area/map', data)

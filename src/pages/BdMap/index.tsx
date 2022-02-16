@@ -1,16 +1,23 @@
-import {Toast} from 'antd-mobile';
+import {Ellipsis, Toast} from 'antd-mobile';
 import React, {useEffect, useState} from 'react'
-import {CustomOverlay, Map} from 'react-bmapgl';
+import {CustomOverlay, Map, MapApiLoaderHOC, ScaleControl, ZoomControl} from 'react-bmapgl';
 import {LayoutTop} from '../../layouts/DefaultLayout/LayoutTop';
 import store from "../../redux/store";
 import styles from './index.module.less'
 import {apiAreaMap} from "../../utils/request/api";
-import index from "../../router";
+
 
 export const BdMap = () => {
 
     /**state  state部分**/
-    const [location, setLocation] = useState<object>()
+    const [location, setLocation] = useState<object>({})
+    const [mapOption, setMapOption] = useState<object>({
+        position:{
+            lat: 0,
+            lng: 0
+        },
+        zoom: 11
+    })
     const [overLayList, setOverLayList] = useState<object[]>([])
     /**effect  effect部分**/
     useEffect(() => {
@@ -26,14 +33,38 @@ export const BdMap = () => {
         // })
         getLocation()
         const {label, value}: any = store.getState().city
-        getAreaMap(value)
+        getAreaMap({value})
     }, [])
     /**methods 方法部分**/
     // 获取房源信息
-    const getAreaMap = (data:string) => {
-        apiAreaMap({id: data}).then((res:any) =>{
+    const getAreaMap = (data:object) => {
+        Toast.show({icon:'loading',content:'加载中'})
+        let val = data as any
+        apiAreaMap({id: val['value']}).then((res:any) =>{
             const {body:dataList} = res
             setOverLayList(dataList)
+            let option = mapOption as any
+            // 计算要绘制的覆盖物类型和下一个缩放级别
+            // 区    -> 11 范围：>=10 <12
+            // 镇    -> 13 范围：>=12 <14
+            // 小区  -> 15 范围：>=14 <16
+            if (parseInt(option['zoom']) >=10 && parseInt(option['zoom']) < 12){
+                if (val['coord']) setMapOption({
+                    position:{
+                        lat: val['coord']['latitude'],
+                        lng: val['coord']['longitude']
+                    },
+                    zoom: 13
+                })
+            } else if (parseInt(option['zoom']) >=12 && parseInt(option['zoom']) < 14){
+                if (val['coord']) setMapOption({
+                    position:{
+                        lat: val['coord']['latitude'],
+                        lng: val['coord']['longitude']
+                    },
+                    zoom: 15
+                })
+            }
         })
     }
     // 通过百度地图Api获取位置信息
@@ -46,7 +77,8 @@ export const BdMap = () => {
             // await geolocation.getCurrentPosition(function(r:any){
             //     const {address:{province,city,district,street}} = r
             //     const {longitude:lng,latitude:lat} = r
-            //     setLocation({lng,lat})
+            //     setLocation()
+            //     setMapOption({position:{lng,lat},zoom:12})
             //     console.log(r)
             //     console.log(`您当前在${province + city + district + street}`)
             // });
@@ -56,8 +88,8 @@ export const BdMap = () => {
             // 将地址解析结果显示在地图上，并调整地图视野
             await myGeo.getPoint(label + '市', function (point: any) {
                 if (point) {
-                    setLocation(point)
-
+                    console.log(point)
+                    setMapOption({position:point,zoom:11})
                 } else {
                     Toast.show({content: '您选择的地址没有解析到结果！'});
                 }
@@ -88,19 +120,26 @@ export const BdMap = () => {
             <LayoutTop>地图找房</LayoutTop>
             <Map
                 style={{height: window.innerHeight - 45}}
-                center={location}
-                zoom={15}
+                center={(mapOption as any)['position']}
+                zoom={(mapOption as any)['zoom']}
                 heading={0}
                 tilt={40}
                 // onClick={e => console.log(e)}
-                enableScrollWheelZoom
+                enableScrollWheelZoom={false}
             >
+                <ScaleControl map={null}/>
+                <ZoomControl map={null}/>
                 {
                     overLayList.map((item:any,index) => {
-                        return <CustomOverlay key={index} position={{lng: item['coord']['longitude'], lat: item['coord']['latitude']}} map={<Map center={location} zoom={15}/>}>
-                            <div className={styles.overLay} onClick={handleClick(item)}>
-                                <p>{item['label']}</p>
-                                <p>{item['count']}套</p>
+                        return <CustomOverlay key={index}
+                                              position={{lng: item['coord']['longitude'], lat: item['coord']['latitude']}}
+                                              map={null}>
+                            <div className={(mapOption as any)['zoom'] !== 15 ? styles.overLay:styles.overLayRect}
+                                 onClick={()=>{if ((mapOption as any)['zoom'] !== 15)getAreaMap(item)}}>
+                                <div style={{width:65}}>
+                                    <Ellipsis direction='end' content={item['label']} />
+                                </div>
+                                <div>{item['count']}套</div>
                             </div>
                         </CustomOverlay>
                     })
@@ -109,3 +148,5 @@ export const BdMap = () => {
         </div>
     );
 };
+// 异步加载JSAPI的高阶组件，在业务组件中使用，从而实现将JSAPI以异步形式插入，而不是提前放到index.html模板里。
+MapApiLoaderHOC({ak: 'WrzCPNZeMy7ppUh6QNWZLrtpRQE0g0e4'})(BdMap)

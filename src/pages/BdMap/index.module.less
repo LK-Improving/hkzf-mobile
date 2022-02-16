@@ -2,7 +2,9 @@
   width: 70px;
   height: 70px;
   line-height: 1;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   position: absolute;
   border-radius: 100%;
   background: rgba(12,181,106,.9);
@@ -10,4 +12,18 @@
   border: 2px solid hsla(0,0%,100%,.8);
   text-align: center;
   cursor: pointer;
+}
+.overLayRect{
+  //height: 30px;
+  line-height: 20px;
+  width: 120px;
+  padding: 0 3px;
+  border-radius: 3px;
+  position: absolute;
+  background: rgba(12,181,106,.9);
+  cursor: pointer;
+  white-space: nowrap;
+  color: white;
+  display: flex;
+  justify-content: space-around;
 }

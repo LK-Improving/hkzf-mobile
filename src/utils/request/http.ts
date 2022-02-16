@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === 'development') {
 export const baseUrl = axios.defaults.baseURL
 
 // 设置请求超时
-axios.defaults.timeout = 3000
+axios.defaults.timeout = 5000
 
 // 设置请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'

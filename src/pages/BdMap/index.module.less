@@ -27,3 +27,61 @@
   display: flex;
   justify-content: space-around;
 }
+.pop{
+  .title{
+    height: 50px;
+    background: #c0c0c2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    .listTitle{
+      font-size: 16px;
+      font-weight: bold;
+      color: #1e1e1e;
+    }
+    .moreTitle{
+      font-size: 13px;
+      color: #1e1e1e;
+    }
+  }
+  .house{
+    padding: 0 10px;
+    .row{
+      height: 120px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ededed;
+      padding: 10px 0;
+      .rowLeft{
+        width: 106px;
+      }
+      .rowRight{
+        width: calc(100% - 116px);
+        height: 80px;
+        .houseName{
+          font-size: 15px;
+          color: #394043;
+          font-weight: bold;
+        }
+        .houseInfo{
+          font-size: 13px;
+          color: #afb2b3;
+        }
+        .houseTags{
+          font-size: 12px;
+          margin: 4px 0;
+        }
+        .housePrice{
+          font-size: 13px;
+          color: #fa5741;
+          span{
+            font-size: 16px;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}

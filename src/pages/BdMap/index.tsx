@@ -1,16 +1,19 @@
-import {Ellipsis, Toast} from 'antd-mobile';
+import {Image, Ellipsis, Popup, Toast, Tag, Space} from 'antd-mobile';
 import React, {useEffect, useState} from 'react'
 import {CustomOverlay, Map, MapApiLoaderHOC, ScaleControl, ZoomControl} from 'react-bmapgl';
 import {LayoutTop} from '../../layouts/DefaultLayout/LayoutTop';
 import store from "../../redux/store";
 import styles from './index.module.less'
-import {apiAreaMap} from "../../utils/request/api";
+import {apiAreaMap, apiGetHouses} from "../../utils/request/api";
+import {baseUrl} from "../../utils/request/http";
+import { useHistory } from 'react-router-dom';
 
 
 export const BdMap = () => {
 
     /**state  state部分**/
-    const [location, setLocation] = useState<object>({})
+    const [houseList, setHouseList] = useState<object[]>([{}])
+    const [visible, setVisible] = useState<boolean>(false)
     const [mapOption, setMapOption] = useState<object>({
         position:{
             lat: 0,
@@ -19,6 +22,7 @@ export const BdMap = () => {
         zoom: 11
     })
     const [overLayList, setOverLayList] = useState<object[]>([])
+    const history = useHistory()
     /**effect  effect部分**/
     useEffect(() => {
         // 通过H5Api获取位置信息
@@ -38,10 +42,11 @@ export const BdMap = () => {
     /**methods 方法部分**/
     // 获取房源信息
     const getAreaMap = (data:object) => {
-        Toast.show({icon:'loading',content:'加载中'})
+        Toast.show({icon:'loading',duration: 0,content:'加载中'})
         let val = data as any
         apiAreaMap({id: val['value']}).then((res:any) =>{
             const {body:dataList} = res
+            Toast.clear()
             setOverLayList(dataList)
             let option = mapOption as any
             // 计算要绘制的覆盖物类型和下一个缩放级别
@@ -95,10 +100,28 @@ export const BdMap = () => {
                 }
             })
         }
-    // 点击覆盖物
-    const handleClick = (params: any) => {
-        return () => {
-            console.log(params)
+    // 获取房源数据
+    const getHouse = (params: any) => {
+        console.log(params)
+        Toast.show({icon:'loading',duration: 0,content:'加载中'})
+        setVisible(true)
+        setMapOption({
+            position:{
+                lat: params['coord']['latitude'],
+                lng: params['coord']['longitude']
+            },
+            zoom: 15
+        })
+        apiGetHouses({cityId:params['value']}).then((res:any) => {
+            Toast.clear()
+            const {body:{list:dataList}} = res
+            setHouseList(dataList)
+        })
+    }
+    // 跳转路由
+    const go = (path:string)=>{
+        return ()=>{
+            history.push(path)
         }
     }
     /**styles 样式部分**/
@@ -135,7 +158,7 @@ export const BdMap = () => {
                                               position={{lng: item['coord']['longitude'], lat: item['coord']['latitude']}}
                                               map={null}>
                             <div className={(mapOption as any)['zoom'] !== 15 ? styles.overLay:styles.overLayRect}
-                                 onClick={()=>{if ((mapOption as any)['zoom'] !== 15)getAreaMap(item)}}>
+                                 onClick={()=>{(mapOption as any)['zoom'] !== 15 ? getAreaMap(item) : getHouse(item)}}>
                                 <div style={{width:65}}>
                                     <Ellipsis direction='end' content={item['label']} />
                                 </div>
@@ -145,6 +168,53 @@ export const BdMap = () => {
                     })
                 }
             </Map>
+            <Popup
+                visible={visible}
+                onMaskClick={() => {
+                    setVisible(false)
+                }}
+                bodyStyle={{
+                    borderTopLeftRadius: '8px',
+                    borderTopRightRadius: '8px',
+                    minHeight: '40vh',
+                }}
+            >
+                <div className={styles.pop}>
+                    <div className={styles.title}>
+                        <p className={styles.listTitle}>房源列表</p>
+                        <p className={styles.moreTitle} onClick={go('')}>更多房源</p>
+                    </div>
+                    <div className={styles.house}>
+                        {
+                            houseList.map((item:any,index)=>{
+                                return <div key={index} className={styles.row} onClick={go('')}>
+                                    <div className={styles.rowLeft}>
+                                        <Image src={baseUrl + item['houseImg']} width={106} height={80}/>
+                                    </div>
+                                    <div className={styles.rowRight}>
+                                        <div className={styles.houseName}>
+                                            <Ellipsis direction='end' content={item['title']} />
+                                        </div>
+                                        <div className={styles.houseInfo}>{item['desc']}</div>
+                                        <div className={styles.houseTags}>
+                                            <Space wrap>
+                                                {
+                                                    item['tags']=== undefined?'':item['tags'].map((tag:string,index2:number)=>{
+                                                        return <Tag color={index2 / 2 === 0?'primary':'warning'} key={index2} fill='outline'>
+                                                            {tag}
+                                                        </Tag>
+                                                    })
+                                                }
+                                            </Space>
+                                        </div>
+                                        <div className={styles.housePrice}><span>{item['price']}</span> 元/月</div>
+                                    </div>
+                                </div>
+                            })
+                        }
+                    </div>
+                </div>
+            </Popup>
         </div>
     );
 };

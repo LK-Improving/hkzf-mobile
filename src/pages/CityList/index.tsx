@@ -1,17 +1,19 @@
 import {IndexBar, NavBar, List as amList, Toast} from 'antd-mobile';
 import {AutoSizer, List} from 'react-virtualized';
-import React, {useEffect, useRef, useState} from 'react'
+import React, {memo, useEffect, useRef, useState} from 'react'
 import {useHistory} from 'react-router-dom';
 import {apiAreaCity, apiAreaHot} from "../../utils/request/api";
 import {formatCityData, getCurrentCity} from "../../utils";
 import {IndexBarRef} from "antd-mobile/es/components/index-bar";
 import styles from './index.module.less'
-import store from "../../redux/store";
+// import store from "../../redux/store";
+import store from "../../mobx/store";
 import {setCityAction} from "../../redux/City/action";
 import { LayoutTop } from '../../layouts/DefaultLayout/LayoutTop';
+import {SET_CITY} from "../../redux/contant";
 
-
-export const CityList = () => {
+// memo():只有props发生改变时重新渲染该组件，否则之渲染局部组件（同PureComponent但同PureComponent但竟能在class组件中使用）
+export const CityList = memo(() => {
 
     /**state  state部分**/
     const history = useHistory()
@@ -89,7 +91,8 @@ export const CityList = () => {
                     content: '该城市暂无房源信息'
                 })
             }
-            store.dispatch(setCityAction(data))
+            // store.dispatch(setCityAction(data)) // redux写法
+            store.cityReducer({type:SET_CITY,data}) // mobX写法
             localStorage.setItem('city', JSON.stringify(data))
             back()
         }
@@ -170,4 +173,4 @@ export const CityList = () => {
             {/*</IndexBar>*/}
         </div>
     );
-};
+})

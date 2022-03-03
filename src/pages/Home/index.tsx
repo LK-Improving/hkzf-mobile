@@ -5,7 +5,6 @@ import {Nav} from "./Nav";
 import {Groups} from "./Groups";
 import {News} from "./News";
 import {Search} from "./Search";
-import {log} from "util";
 
 
 export const Home = () => {
